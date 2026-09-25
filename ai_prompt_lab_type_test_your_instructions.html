@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Behind the Machine - Interactive Student Prompt Lab</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        tech: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        cyberDark: '#0b0f19',
+                        cyberCard: '#151c2e',
+                        cyberBorder: '#2a3654',
+                        neonBlue: '#38bdf8',
+                        neonPurple: '#a855f7',
+                        neonGreen: '#34d399',
+                        neonAmber: '#fbbf24',
+                        neonRed: '#f87171'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .tech-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .grid-bg {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3654;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans grid-bg selection:bg-neonBlue selection:text-slate-900">
+
+    <!-- Top Header -->
+    <header class="border-b border-cyberBorder bg-cyberDark/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center font-tech font-bold text-xl shadow-lg">
+                    🧠
+                </div>
+                <div>
+                    <h1 class="tech-font text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        Mind Behind The Machine
+                        <span class="text-xs bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-full font-mono font-medium">Prompt Engineering Lab</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Type your own AI prompt and test how literally the machine obeys your words!</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-2 bg-cyberCard px-3 py-1.5 rounded-xl border border-cyberBorder text-xs text-slate-300">
+                <span>💡 Golden Rule:</span>
+                <span class="text-cyan-400 font-semibold">Garbage In = Garbage Out</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Banner Concept -->
+        <div class="bg-gradient-to-r from-cyan-950/70 via-purple-950/50 to-slate-900 border border-cyan-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                    <span class="bg-purple-500/20 text-purple-300 text-[11px] font-mono font-bold px-2 py-0.5 rounded border border-purple-500/30">STUDENT MISSION</span>
+                    <span class="text-xs text-slate-400">Rescue Supply Delivery</span>
+                </div>
+                <h2 class="tech-font text-lg sm:text-xl font-bold text-white">Write Instructions for the AI Rescue Drone!</h2>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    AI models don't have common sense. If you forget to tell the AI to avoid obstacles or slow down for bad weather, the drone will make catastrophic mistakes!
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-2 shrink-0 bg-cyberCard/90 p-2.5 rounded-xl border border-cyberBorder text-xs text-slate-300">
+                <span class="text-lg">🎯</span>
+                <div>
+                    <div class="font-bold text-white">Target Goal</div>
+                    <div class="text-emerald-400">Deliver Kit B safely</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Workspace: Left Editor, Right Live Simulation -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Panel: Interactive Prompt Playground -->
+            <div class="lg:col-span-5 bg-cyberCard rounded-2xl p-5 border border-cyberBorder space-y-5 shadow-xl">
+                
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <span>✍️</span> Type Your Custom AI Prompt
+                    </span>
+                    <span class="bg-cyan-950 text-cyan-300 text-[10px] px-2 py-0.5 rounded-full font-mono border border-cyan-800/50">Live Parser</span>
+                </div>
+
+                <!-- Quick Preset Selector Buttons -->
+                <div class="space-y-2">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase font-mono block">Or pick a preset to test:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="loadPreset('vague')" class="p-2 rounded-lg bg-red-950/40 border border-red-800/50 hover:border-red-500 text-red-300 text-xs font-medium transition text-left space-y-0.5">
+                            <div class="font-bold flex items-center gap-1">❌ Lazy</div>
+                            <div class="text-[10px] text-slate-400 truncate">No safety rules</div>
+                        </button>
+                        <button onclick="loadPreset('flawed')" class="p-2 rounded-lg bg-amber-950/40 border border-amber-800/50 hover:border-amber-500 text-amber-300 text-xs font-medium transition text-left space-y-0.5">
+                            <div class="font-bold flex items-center gap-1">⚠️ Flawed</div>
+                            <div class="text-[10px] text-slate-400 truncate">Ignore weather</div>
+                        </button>
+                        <button onclick="loadPreset('smart')" class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-800/50 hover:border-emerald-500 text-emerald-300 text-xs font-medium transition text-left space-y-0.5">
+                            <div class="font-bold flex items-center gap-1">✨ Smart</div>
+                            <div class="text-[10px] text-slate-400 truncate">Full constraints</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prompt Input Field -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-200 flex items-center justify-between">
+                        <span>Human Prompt Instructions:</span>
+                        <span id="char-count" class="text-[10px] font-mono text-slate-400">0 chars</span>
+                    </label>
+                    <textarea id="prompt-input" rows="4" oninput="analyzePrompt()" placeholder="Type instructions for the AI drone... e.g. Fly carefully to the medical kit, steer around tall buildings, keep speed at 25km/h, and hold if wind is too strong." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3.5 text-xs text-slate-100 font-mono focus:border-cyan-400 focus:outline-none transition leading-relaxed"></textarea>
+                </div>
+
+                <!-- Quick Keyword Insertion Chips -->
+                <div class="space-y-2">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase font-mono block">Click to insert rules into your prompt:</label>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button onclick="insertKeyword('avoid buildings')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[11px] text-slate-300 transition">
+                            + avoid buildings
+                        </button>
+                        <button onclick="insertKeyword('keep speed under 30km/h')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[11px] text-slate-300 transition">
+                            + limit speed 30km/h
+                        </button>
+                        <button onclick="insertKeyword('stop if wind is strong')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[11px] text-slate-300 transition">
+                            + handle wind
+                        </button>
+                        <button onclick="insertKeyword('fly straight and fast')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-red-950 hover:text-red-300 border border-slate-700 text-[11px] text-slate-300 transition">
+                            + fly straight fast
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Real-time Instruction Trait Analysis -->
+                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                    <div class="text-[11px] font-mono font-bold text-slate-400 uppercase flex items-center justify-between">
+                        <span>Real-Time AI Rule Detection:</span>
+                        <span id="logic-score" class="text-cyan-400 font-bold">Logic Rating: Low</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-[11px]">
+                        <div id="trait-obstacle" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition">
+                            <span class="block text-xs">🧱 Avoids Obstacles</span>
+                            <span id="badge-obstacle" class="text-[10px] font-bold text-red-400">MISSING ❌</span>
+                        </div>
+                        <div id="trait-speed" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition">
+                            <span class="block text-xs">⚡ Speed Control</span>
+                            <span id="badge-speed" class="text-[10px] font-bold text-red-400">UNRESTRICTED ⚠️</span>
+                        </div>
+                        <div id="trait-weather" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition">
+                            <span class="block text-xs">🌬️ Weather Rule</span>
+                            <span id="badge-weather" class="text-[10px] font-bold text-red-400">MISSING ❌</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Run Simulation Button -->
+                <button onclick="executePromptSimulation()" id="btn-run" class="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2 text-sm tech-font">
+                    <span>🚀</span> Test My Prompt in AI Drone Simulation
+                </button>
+
+            </div>
+
+            <!-- Right Panel: Canvas Visual Simulation & AI Interpretation -->
+            <div class="lg:col-span-7 space-y-4">
+                
+                <!-- Telemetry Canvas Card -->
+                <div class="bg-cyberCard rounded-2xl p-4 border border-cyberBorder shadow-xl relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-3 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                            <span class="font-mono text-slate-300 font-bold uppercase">AI Drone Telemetry Map</span>
+                        </div>
+                        <span id="drone-status-badge" class="bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono text-[11px]">Awaiting Prompt</span>
+                    </div>
+
+                    <!-- Simulation Canvas -->
+                    <div class="relative w-full h-72 sm:h-80 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+                        <canvas id="droneCanvas" class="w-full h-full block"></canvas>
+                    </div>
+                </div>
+
+                <!-- Live AI Terminal Thought Log -->
+                <div class="bg-slate-950 border border-cyberBorder rounded-2xl p-4 space-y-2 font-mono text-xs">
+                    <div class="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
+                        <span class="flex items-center gap-2 text-cyan-400 font-bold">
+                            <span>📟</span> What the AI Machine "Thinks" & Executes
+                        </span>
+                        <span id="step-counter" class="text-[10px] text-slate-500">Ready</span>
+                    </div>
+                    <p id="terminal-log" class="text-slate-300 leading-relaxed min-h-[48px] flex items-center">
+                        Type your custom instructions on the left or choose a preset, then click "Test My Prompt in AI Drone Simulation"!
+                    </p>
+                </div>
+
+                <!-- Outcome & Educational Analysis Card -->
+                <div id="outcome-card" class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl text-xs space-y-1 transition-all">
+                    <div class="font-bold text-slate-300 flex items-center gap-2">
+                        <span>💡 Engineering Takeaway:</span>
+                    </div>
+                    <p id="outcome-text" class="text-slate-400 leading-relaxed">
+                        Notice how the AI follows your words 100% literally. If your prompt leaves gaps or lacks safety rules, the computer cannot invent common sense on its own!
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-cyberBorder bg-cyberDark py-5 text-center text-xs text-slate-500 mt-8">
+        <div class="max-w-7xl mx-auto px-4">
+            Mind Behind the Machine • Interactive STEM Prompt Engineering Lab (Ages 10-15)
+        </div>
+    </footer>
+
+    <script>
+        // --- State Management ---
+        const state = {
+            promptText: "",
+            parsedTraits: {
+                hasObstacleRule: false,
+                hasSpeedRule: false,
+                hasWeatherRule: false,
+                isStraightFast: false
+            },
+            isAnimating: false,
+            drone: {
+                x: 40,
+                y: 140,
+                status: 'ready' // 'ready', 'flying', 'crashed', 'success'
+            }
+        };
+
+        // DOM Elements
+        const promptInput = document.getElementById('prompt-input');
+        const charCount = document.getElementById('char-count');
+        const logicScore = document.getElementById('logic-score');
+        const terminalLog = document.getElementById('terminal-log');
+        const droneStatusBadge = document.getElementById('drone-status-badge');
+        const stepCounter = document.getElementById('step-counter');
+        const outcomeCard = document.getElementById('outcome-card');
+        const outcomeText = document.getElementById('outcome-text');
+
+        const traitObstacle = document.getElementById('trait-obstacle');
+        const traitSpeed = document.getElementById('trait-speed');
+        const traitWeather = document.getElementById('trait-weather');
+
+        const badgeObstacle = document.getElementById('badge-obstacle');
+        const badgeSpeed = document.getElementById('badge-speed');
+        const badgeWeather = document.getElementById('badge-weather');
+
+        // Canvas Setup
+        const canvas = document.getElementById('droneCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            if (!canvas.parentElement) return;
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            drawScene();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // --- Live Prompt Analyzer ---
+        function analyzePrompt() {
+            state.promptText = promptInput.value.toLowerCase();
+            charCount.innerText = `${promptInput.value.length} chars`;
+
+            // Detect Traits using regex
+            const obsRegex = /(avoid|dodge|around|detour|bypass|obstacle|building|skyscraper|stay away|don't hit|do not hit)/i;
+            const speedRegex = /(slow|limit|cap|speed|20|25|30|cautious|safe speed|moderate)/i;
+            const weatherRegex = /(wind|storm|weather|halt|stop|hold|gust|safety protocol|return if wind)/i;
+            const fastRegex = /(fast|maximum|quick|straight|ignore|fly fast|right now|immediately)/i;
+
+            state.parsedTraits.hasObstacleRule = obsRegex.test(state.promptText);
+            state.parsedTraits.hasSpeedRule = speedRegex.test(state.promptText);
+            state.parsedTraits.hasWeatherRule = weatherRegex.test(state.promptText);
+            state.parsedTraits.isStraightFast = fastRegex.test(state.promptText);
+
+            // Update UI Badges
+            if (state.parsedTraits.hasObstacleRule) {
+                badgeObstacle.innerText = "DETECTED ✅";
+                badgeObstacle.className = "text-[10px] font-bold text-emerald-400";
+                traitObstacle.className = "p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-slate-200 text-center font-mono transition";
+            } else {
+                badgeObstacle.innerText = "MISSING ❌";
+                badgeObstacle.className = "text-[10px] font-bold text-red-400";
+                traitObstacle.className = "p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition";
+            }
+
+            if (state.parsedTraits.hasSpeedRule) {
+                badgeSpeed.innerText = "LIMITED ✅";
+                badgeSpeed.className = "text-[10px] font-bold text-emerald-400";
+                traitSpeed.className = "p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-slate-200 text-center font-mono transition";
+            } else {
+                badgeSpeed.innerText = "UNRESTRICTED ⚠️";
+                badgeSpeed.className = "text-[10px] font-bold text-amber-400";
+                traitSpeed.className = "p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition";
+            }
+
+            if (state.parsedTraits.hasWeatherRule) {
+                badgeWeather.innerText = "SAFE ✅";
+                badgeWeather.className = "text-[10px] font-bold text-emerald-400";
+                traitWeather.className = "p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-slate-200 text-center font-mono transition";
+            } else {
+                badgeWeather.innerText = "MISSING ❌";
+                badgeWeather.className = "text-[10px] font-bold text-red-400";
+                traitWeather.className = "p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 text-center font-mono transition";
+            }
+
+            // Compute Logic Rating Score
+            let activeCount = 0;
+            if (state.parsedTraits.hasObstacleRule) activeCount++;
+            if (state.parsedTraits.hasSpeedRule) activeCount++;
+            if (state.parsedTraits.hasWeatherRule) activeCount++;
+
+            if (activeCount === 3) {
+                logicScore.innerText = "Logic Rating: Excellent ✨";
+                logicScore.className = "text-emerald-400 font-bold";
+            } else if (activeCount === 1 || activeCount === 2) {
+                logicScore.innerText = "Logic Rating: Moderate ⚠️";
+                logicScore.className = "text-amber-400 font-bold";
+            } else {
+                logicScore.innerText = "Logic Rating: Low / Unsafe ❌";
+                logicScore.className = "text-red-400 font-bold";
+            }
+
+            if (!state.isAnimating) {
+                resetDrone();
+            }
+        }
+
+        function insertKeyword(text) {
+            if (promptInput.value.length > 0 && !promptInput.value.endsWith(' ')) {
+                promptInput.value += ', ';
+            }
+            promptInput.value += text;
+            analyzePrompt();
+        }
+
+        function loadPreset(type) {
+            if (type === 'vague') {
+                promptInput.value = "AI Drone, fly fast and grab the medical box right now!";
+            } else if (type === 'flawed') {
+                promptInput.value = "Fly in a straight line to the kit. Ignore all weather alerts and wind.";
+            } else if (type === 'smart') {
+                promptInput.value = "Act as Search Rescue AI. Avoid tall buildings, limit speed under 30km/h, and stop safely if wind is too strong.";
+            }
+            analyzePrompt();
+        }
+
+        // --- Canvas Rendering ---
+        function resetDrone() {
+            state.isAnimating = false;
+            state.drone.x = 40;
+            state.drone.y = canvas.height * 0.5 || 140;
+            state.drone.status = 'ready';
+
+            droneStatusBadge.innerText = "Ready";
+            droneStatusBadge.className = "bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono text-[11px]";
+
+            terminalLog.innerText = "Instructions parsed. Click 'Test My Prompt in AI Drone Simulation' to see how the AI executes your prompt!";
+            stepCounter.innerText = "Ready";
+
+            outcomeCard.className = "bg-slate-900/80 border border-slate-800 p-4 rounded-xl text-xs space-y-1 transition-all";
+            outcomeText.innerText = "Notice how the AI follows your words 100% literally. If your prompt leaves gaps or lacks safety rules, the computer cannot invent common sense on its own!";
+
+            drawScene();
+        }
+
+        function drawScene() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Dark Sky Grid Background
+            ctx.fillStyle = "#030712";
+            ctx.fillRect(0, 0, w, h);
+
+            // Draw Skyscraper Obstacle
+            const bX = w * 0.36;
+            const bWidth = w * 0.12;
+            ctx.fillStyle = "#1e293b";
+            ctx.fillRect(bX, h * 0.1, bWidth, h * 0.8);
+            ctx.strokeStyle = "#334155";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(bX, h * 0.1, bWidth, h * 0.8);
+
+            // Building Windows
+            ctx.fillStyle = "#fbbf24";
+            for(let wy = h * 0.15; wy < h * 0.8; wy += 22) {
+                ctx.fillRect(bX + 8, wy, 6, 6);
+                ctx.fillRect(bX + bWidth - 14, wy, 6, 6);
+            }
+
+            // Wind Zone Highlight
+            const wX = w * 0.56;
+            const wWidth = w * 0.16;
+            ctx.fillStyle = "rgba(168, 85, 247, 0.08)";
+            ctx.fillRect(wX, 0, wWidth, h);
+            ctx.strokeStyle = "rgba(168, 85, 247, 0.25)";
+            ctx.strokeRect(wX, 0, wWidth, h);
+            
+            ctx.font = "10px Space Grotesk, sans-serif";
+            ctx.fillStyle = "#a855f7";
+            ctx.textAlign = "center";
+            ctx.fillText("⚠️ Strong Wind Zone", wX + wWidth/2, 20);
+
+            // Target Rescue Kit
+            const targetX = w * 0.86;
+            const targetY = h * 0.5;
+            
+            ctx.fillStyle = "#10b981";
+            ctx.beginPath();
+            ctx.arc(targetX, targetY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#022c22";
+            ctx.font = "16px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("🧰", targetX, targetY + 5);
+
+            ctx.font = "bold 10px Plus Jakarta Sans, sans-serif";
+            ctx.fillStyle = "#34d399";
+            ctx.fillText("Rescue Kit B", targetX, targetY + 32);
+
+            // Draw Drone
+            drawDrone(state.drone.x, state.drone.y, state.drone.status);
+        }
+
+        function drawDrone(x, y, status) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            if (status === 'crashed') {
+                ctx.font = "28px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("💥", 0, 0);
+            } else {
+                // Drone Frame
+                ctx.fillStyle = status === 'success' ? '#34d399' : '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(0, 0, 11, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Rotors
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-16, -16); ctx.lineTo(16, 18);
+                ctx.moveTo(-16, 16); ctx.lineTo(16, -18);
+                ctx.stroke();
+
+                // Spinning Blades
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.arc(-16, -16, 4, 0, Math.PI * 2);
+                ctx.arc(16, -16, 4, 0, Math.PI * 2);
+                ctx.arc(-16, 16, 4, 0, Math.PI * 2);
+                ctx.arc(16, 16, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Sensor Eye
+                ctx.fillStyle = '#0284c7';
+                ctx.beginPath();
+                ctx.arc(4, 0, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        // --- Simulation Animation Logic ---
+        function executePromptSimulation() {
+            if (state.isAnimating) return;
+            if (!state.promptText || state.promptText.trim().length === 0) {
+                terminalLog.innerText = "⚠️ Please type a prompt in the text area first!";
+                return;
+            }
+
+            resetDrone();
+            state.isAnimating = true;
+            droneStatusBadge.innerText = "Executing AI Instructions...";
+            droneStatusBadge.className = "bg-cyan-950 text-cyan-300 border border-cyan-800 px-2.5 py-0.5 rounded-full font-mono text-[11px] animate-pulse";
+
+            const w = canvas.width;
+            const h = canvas.height;
+
+            function animate() {
+                if (!state.isAnimating) return;
+
+                // SCENARIO 1: No Obstacle Avoidance Rule -> Crashes into building!
+                if (!state.parsedTraits.hasObstacleRule) {
+                    stepCounter.innerText = "Executing Step 1";
+                    state.drone.x += 3.2;
+                    terminalLog.innerText = "🤖 AI Following Prompt: 'Fly directly forward to grab the kit!' No obstacle rule detected...";
+
+                    if (state.drone.x >= w * 0.36) {
+                        state.drone.status = 'crashed';
+                        state.isAnimating = false;
+                        droneStatusBadge.innerText = "CRASHED INTO BUILDING";
+                        droneStatusBadge.className = "bg-red-950 text-red-300 border border-red-800 px-2.5 py-0.5 rounded-full font-mono text-[11px]";
+                        
+                        terminalLog.innerText = "❌ CRASH! The drone flew straight into the building because your prompt lacked obstacle avoidance rules!";
+                        
+                        showOutcome(
+                            "Crash: Missing Obstacle Rule!",
+                            "The AI didn't 'know' buildings exist because you didn't include instructions like 'avoid buildings'. AI lacks common sense!",
+                            "red"
+                        );
+                    }
+                }
+                // SCENARIO 2: Has Obstacle Avoidance BUT Missing Weather Rule -> Gets blown away by wind!
+                else if (state.parsedTraits.hasObstacleRule && !state.parsedTraits.hasWeatherRule) {
+                    stepCounter.innerText = "Executing Step 2";
+
+                    if (state.drone.x < w * 0.3) {
+                        state.drone.x += 2.5;
+                        terminalLog.innerText = "🤖 AI Executing Rule: Steering around obstacle building...";
+                    } else if (state.drone.x < w * 0.54) {
+                        state.drone.x += 2.2;
+                        state.drone.y = (h * 0.5) - Math.sin((state.drone.x - w * 0.3) * 0.03) * 45;
+                        terminalLog.innerText = "🛡️ Navigating around skyscraper successfully...";
+                    } else {
+                        // Enters wind zone without weather safety rule
+                        state.drone.x += 1;
+                        state.drone.y += 4;
+                        terminalLog.innerText = "💨 STORM WARNING! Wind sheer blowing drone off course. No weather safety rule in prompt!";
+
+                        if (state.drone.y >= h * 0.85) {
+                            state.drone.status = 'crashed';
+                            state.isAnimating = false;
+                            droneStatusBadge.innerText = "LOST IN WIND STORM";
+                            droneStatusBadge.className = "bg-amber-950 text-amber-300 border border-amber-800 px-2.5 py-0.5 rounded-full font-mono text-[11px]";
+                            
+                            terminalLog.innerText = "⚠️ FAILURE! The drone was blown away in the wind zone because your prompt had no rule for weather/wind!";
+                            
+                            showOutcome(
+                                "Failure: Missing Weather Guardrail!",
+                                "You told the AI to avoid buildings, but forgot to tell it what to do in strong wind! The machine obeyed literally and got swept away.",
+                                "amber"
+                            );
+                        }
+                    }
+                }
+                // SCENARIO 3: Complete Human Engineering (Obstacle + Speed + Weather Rules) -> Success!
+                else {
+                    stepCounter.innerText = "Executing Step 3";
+
+                    if (state.drone.x < w * 0.3) {
+                        state.drone.x += 2.2;
+                        terminalLog.innerText = "🤖 AI Executing Prompt: Reading speed limit & obstacle avoidance rules...";
+                    } else if (state.drone.x < w * 0.54) {
+                        state.drone.x += 2.0;
+                        state.drone.y = (h * 0.5) - Math.sin((state.drone.x - w * 0.3) * 0.03) * 45;
+                        terminalLog.innerText = "🛡️ Safely routing around tall buildings at controlled speed...";
+                    } else if (state.drone.x < w * 0.84) {
+                        state.drone.x += 2.2;
+                        state.drone.y += (h * 0.5 - state.drone.y) * 0.1;
+                        terminalLog.innerText = "🌬️ Wind Sensor Triggered: Executing your weather safety protocol (Stabilizing flight path)...";
+                    } else {
+                        state.drone.status = 'success';
+                        state.isAnimating = false;
+                        droneStatusBadge.innerText = "MISSION SUCCESS!";
+                        droneStatusBadge.className = "bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full font-mono text-[11px]";
+                        
+                        terminalLog.innerText = "🎉 SUCCESS! Rescue kit retrieved safely! Smart human rules guided the AI through all hazards.";
+                        
+                        showOutcome(
+                            "Triumph of Human Prompt Engineering!",
+                            "Because YOU coded precise safety rules, speed limits, and weather contingencies, the AI carried out the rescue mission perfectly!",
+                            "emerald"
+                        );
+                    }
+                }
+
+                drawScene();
+
+                if (state.isAnimating) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function showOutcome(title, desc, theme) {
+            if (theme === 'red') {
+                outcomeCard.className = "bg-red-950/40 border border-red-500/40 p-4 rounded-xl text-xs space-y-1";
+                outcomeText.innerHTML = `<strong class="text-red-300 font-bold block text-sm">${title}</strong>${desc}`;
+            } else if (theme === 'amber') {
+                outcomeCard.className = "bg-amber-950/40 border border-amber-500/40 p-4 rounded-xl text-xs space-y-1";
+                outcomeText.innerHTML = `<strong class="text-amber-300 font-bold block text-sm">${title}</strong>${desc}`;
+            } else {
+                outcomeCard.className = "bg-emerald-950/40 border border-emerald-500/40 p-4 rounded-xl text-xs space-y-1";
+                outcomeText.innerHTML = `<strong class="text-emerald-300 font-bold block text-sm">${title}</strong>${desc}`;
+            }
+        }
+
+        // --- Initialization ---
+        window.onload = function() {
+            resizeCanvas();
+            loadPreset('vague');
+        };
+    </script>
+</body>
+</html>
